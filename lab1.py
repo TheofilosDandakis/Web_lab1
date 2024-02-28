@@ -1,20 +1,8 @@
-import requests  # εισαγωγή της βιβλιοθήκης
+import requests
 
-def more(text):
-    count = 0
-    for line in text.split('\n'):
-        print(line)
-        count += 1
-        if count % 30 == 0:
-            reply = input('Show more (y/n)? ')
-            if reply == 'n':
-                break
+url = input('enter a URL:')
 
-url = input('enter a URL:')  # προσδιορισμός του url
-
-with requests.get(url) as response:  # το αντικείμενο response
-    #html = response.text
-    #more(html)
+with requests.get(url) as response:
     print("\nRESPONSE HEADER")
     for key, value in response.headers.items():
         print(f"{key:30s} {value}")
@@ -24,8 +12,12 @@ with requests.get(url) as response:  # το αντικείμενο response
     else:
         print('No server found')
     
-    cookies = response.cookies.get('Set-Cookie')
+    cookies = response.cookies
+
+
     if cookies:
-        print(f'The server is :{cookies}')
+        for cookie in cookies:
+            expired = cookie.expires
+            print(f"The cookie is :{cookie.name}={cookie.value} and expires: {expired}")
     else:
         print('No cookies found')
